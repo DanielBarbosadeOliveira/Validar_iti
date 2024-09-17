@@ -1,0 +1,34 @@
+API do ITI para verificar a assinatura de um PDF:
+
+Obtenha o Access Token: Primeiro, você precisa obter um token de acesso para autenticar suas solicitações. Isso geralmente é feito enviando suas credenciais para o endpoint de autenticação da API.
+Python
+
+import requests
+
+url = "https://api.iti.gov.br/auth"
+payload = {
+    "username": "seu_usuario",
+    "password": "sua_senha"
+}
+response = requests.post(url, data=payload)
+token = response.json().get("access_token")
+
+Envie o PDF para Verificação: Com o token de acesso, você pode enviar o PDF para verificação.
+
+url = "https://api.iti.gov.br/validate"
+headers = {
+    "Authorization": f"Bearer {token}"
+}
+files = {
+    "file": ("documento.pdf", open("caminho/para/seu/documento.pdf", "rb"))
+}
+response = requests.post(url, headers=headers, files=files)
+resultado = response.json()
+
+Interprete o Resultado: O resultado da verificação indicará se a assinatura é válida ou não.
+
+
+if resultado["status"] == "valid":
+    print("A assinatura é válida.")
+else:
+    print("A assinatura não é válida.")
